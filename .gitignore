@@ -1,0 +1,52 @@
+# 🏳️ CED-Umm-AL-Mashari | .gitignore Souverain
+# Objectif : Protéger la pureté du dépôt Constitution & Gouvernance.
+
+# 🟥 VAULT & SECRETS (Jamais versionner)
+.env
+.env.local
+.env.production
+*.pem
+*.key
+*.crt
+secrets.json
+credentials.json
+vault-token
+.infomaniak_credentials
+*.p12
+
+# 🖥️ Systèmes d'exploitation (Fichiers locaux)
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# 📝 Éditeurs de code (VS Code, IntelliJ)
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 📂 Dossiers de travail temporaires
+tmp/
+temp/
+*.log
+*.tmp
+
+# 📦 Node.js (Si scripts futurs)
+node_modules/
+npm-debug.log*
+
+# 🐍 Python (Si scripts d'automation futurs)
+__pycache__/
+*.py[cod]
+venv/
+
+# 📄 Documents Privés (Brouillons non validés)
+/docs-internal/drafts/
+*.docx
+*.pdf_local
