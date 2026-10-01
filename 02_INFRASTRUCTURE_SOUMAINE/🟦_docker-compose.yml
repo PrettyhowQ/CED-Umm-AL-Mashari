@@ -1,0 +1,87 @@
+# 🟦 [INFRA] Docker Compose - Écosystème CED HalalTech™
+# Hébergement : Infomaniak (Suisse) - Souverain & Écologique
+# Philosophie : Sobriété énergétique, Sécurité par défaut, Maintenance facile.
+
+version: '3.8'
+
+services:
+  # 🟦 SERVICE: Nginx (Serveur Web Léger)
+  # Rôle : Reverse proxy, gestion SSL, compression GZIP pour économie de bande passante.
+  web:
+    image: nginx:alpine
+    container_name: 🟦_ced_web
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./🟦_nginx/conf.d:/etc/nginx/conf.d
+      - ./🟦_certs:/etc/letsencrypt
+      - ./🟦_html:/usr/share/nginx/html
+    networks:
+      - 🟦_ced_network
+    depends_on:
+      - app
+    # 🟩 Optimisation : Limitation des ressources pour sobriété
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+  # 🟦 SERVICE: App (Backend - Exemple Python/Go)
+  # Rôle : Cœur métier, API, logique financière et éthique.
+  app:
+    build: ./🟦_app
+    container_name: 🟦_ced_app
+    restart: unless-stopped
+    environment:
+      - ENV=production
+      - DB_HOST=db
+      - ETHICS_MODE=strict # Active les filtres éthiques dans le code
+    volumes:
+      - ./🟦_app:/app
+    networks:
+      - 🟦_ced_network
+    depends_on:
+      - db
+    # 🟩 Optimisation : Limitation stricte pour éviter le gaspillage CPU
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+
+  # 🟦 SERVICE: Database (PostgreSQL)
+  # Rôle : Stockage sécurisé et souverain des données (Amanah).
+  db:
+    image: postgres:15-alpine
+    container_name: 🟦_ced_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ced_core
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - 🟦_db_data:/var/lib/postgresql/data
+      - ./🟦_scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - 🟦_ced_network
+    # 🟩 Optimisation : Mémoire ajustée pour base de données légère
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+
+# 🟦 RÉSEAU : Isolation totale pour sécurité maximale
+networks:
+  🟦_ced_network:
+    driver: bridge
+
+# 🟦 VOLUMES : Persistance des données (Sauvegardes Infomaniak)
+volumes:
+  🟦_db_data:
+    driver: local
+  🟦_certs:
+    driver: local
